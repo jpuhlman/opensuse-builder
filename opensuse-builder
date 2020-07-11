@@ -4,7 +4,7 @@ STAMP=$(date +%y%m%d%H%M)
 DISTRO=opensuse
 VERSION=tumbleweed
 IMAGE=$DISTRO:$VERSION
-PULL_IMAGE="0"
+PULL_IMAGE="1"
 MOCK_REQUIREMENTS="--privileged \
                   --cap-add=SYS_ADMIN \
                   --security-opt seccomp:unconfined \
@@ -33,7 +33,7 @@ if [ -e $LOCALHOME/.$DISTRO-builder ] ; then
     source $LOCALHOME/.$DISTRO-builder
 fi
 if [ "$PULL_IMAGE" = "1" ] ; then
-    sudo docker pull $IMAGE
+    sudo docker pull jpuhlman/$IMAGE
 fi
 sudo docker run -it \
     --name $DISTRO-$VERSION-$STAMP \
