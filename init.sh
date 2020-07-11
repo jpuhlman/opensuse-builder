@@ -1,0 +1,24 @@
+#!/bin/bash
+set -x
+if [ -n "$EXTRA_PACKAGES" ] ; then
+   yum install -y $EXTRA_PACKAGES
+fi
+
+groupadd -g $USERGID engr 
+useradd -d $HOME -M -u $USERID -g $USERGID $USERNAME
+echo "$USERNAME  ALL=(ALL)       NOPASSWD: ALL" | tee -a /etc/sudoers > /dev/null
+echo "export LANG='$LANG'" >> /etc/bashrc
+echo
+echo "Welcome to $RELEASE_DISTRO $RELEASE_VERSION builder"
+echo
+if [ -n "$SCRIPTRUNNER" ] ; then
+   if [ -d "$CURRENTPATH" ] ; then
+      cd $CURRENTPATH
+   else
+      cd $HOME
+   fi
+   chmod 755 $SCRIPTRUNNER
+   sudo --preserve-env="CURRENTPATH" -u $USERNAME $SCRIPTRUNNER
+else 
+   su - $USERNAME
+fi
